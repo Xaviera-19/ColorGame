@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0722-5可執行的(分數、開始、停止、時間)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/colorGame.css">
+    <link rel="icon" href="./videogames.png">
+
+</head>
+
+<body>
+    <nav>
+        <div id="score">
+            <i class="fa-solid fa-star"></i>
+            <div class="score"></div>
+        </div>
+        <div id="time">
+            <i class="fa-solid fa-stopwatch stopwatch"></i>
+            <span id="second">60</span>
+        </div>
+        <div id="play-pause">
+            <div class="play-pause-box">
+                <i id="play" class="fa-solid fa-play"></i>
+            </div>
+            <div class="play-pause-box">
+                <i id="pause" class="fa-solid fa-pause"></i>
+            </div>
+            <div class="play-pause-box">
+                <i id="stop" class="fa-solid fa-stop"></i>
+            </div>
+
+
+
+        </div>
+    </nav>
+    <main>
+        <div id="game-box"></div>
+        <div id="continue-box">
+            點擊繼續遊戲
+        </div>
+    </main>
+    <footer>
+        <div id="hint" class="main-box">
+            <i class="fa-regular fa-lightbulb"></i>
+            答案
+            <i class="fa-regular fa-lightbulb"></i>
+        </div>
+    </footer>
+    <script>
+        let gameBox = document.querySelector('#game-box');
+        let play = document.querySelector('#play');
+        let pause = document.querySelector('#pause');
+        let continueBox = document.querySelector('#continue-box');
+        let stop = document.querySelector('#stop');
+        let Lv = document.querySelector('.score');
+        let timer = document.querySelector('#second');
+        let i = 0; // 預設遊戲開始值
+        let stopwatch;// 給碼錶的ID
+        let isPaused = false;
+        // 按鈕事件監聽器
+        play.addEventListener('click', () => {
+            startGame();
+            GameLoop();
+            play.style.display = 'none';
+        })
+
+        stop.addEventListener('click', () => {
+            stopGame();
+            play.style.display = 'block';
+        })
+        pause.addEventListener('click', () => {
+            if (!isPaused) {
+                timePause();
+            } else {
+                timeContinue();
+                timeStart();
+                GameLoop();
+            }
+        });
+        continueBox.addEventListener('click', () => {
+            if (isPaused) {
+                timeContinue();
+                timeStart();
+                GameLoop();
+            }
+        })
+        //
+
+
+        function timeStart() {
+
+            let number = parseInt(timer.innerText);
+            stopwatch = setInterval(function () {
+                number--;
+                if (number < 0) {
+                    number = 60;
+                    clearInterval(stopwatch);
+                    alert(`恭喜通關到${Lv.innerText}>w<`);
+                    play.style.display = 'block';
+                    stopGame();
+                }
+                timer.innerText = number;
+            }, 1000);
+        }
+        function timePause() {
+            clearInterval(stopwatch); //暫停時間
+            isPaused = true;
+
+            let inBox = document.querySelectorAll('.inner');
+            inBox.forEach(element => {
+                element.style.display = 'none';
+            });
+            continueBox.style.display = 'block';
+        }
+        function timeContinue() {
+            clearInterval(stopwatch);
+            isPaused = false;
+
+            let inBox = document.querySelectorAll('.inner');
+            inBox.forEach(element => {
+                element.style.display = 'block';
+            });
+            continueBox.style.display = 'none';
+        }
+        // function PauseGame (){
+        //     inBox.forEach(element => {
+        //         element.style.display = `none`
+        //     });
+        // } 
+        function startGame() {
+            pause.style.visibility = 'visible';
+            stop.style.visibility = 'visible';
+
+            timeStart();//開始計時
+            GameLoop(); // 開始遊戲迴圈
+        }
+
+        function GameLoop() {
+            if (i > 100) {
+                clearInterval(stopwatch);//停止計時
+                return; // 結束迴圈
+            }
+
+            let r = Math.floor(Math.random() * 256);
+            let g = Math.floor(Math.random() * 256);
+            let b = Math.floor(Math.random() * 256);
+            let color = `rgb(${r},${g},${b})`;
+            //  跟樓上一樣
+            //let color = `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`;
+
+            let Lv_Value = (i + 1 * 1);
+            let num = (Lv_Value * 1 + 1) * (Lv_Value * 1 + 1);
+            Lv.innerText = Lv_Value;
+
+            // 先產生方塊
+            innerBox(num, color, Lv_Value,);
+
+            // 選擇答案方塊並添加事件監聽器
+            let inBox = document.querySelectorAll('.inner');
+            let num_ans = Math.floor(Math.random() * num);
+            inBox[num_ans].classList.add("answer");
+            let ans = document.querySelector('.answer');
+            ans.style.opacity = `${0.5 + Lv_Value * 0.012}`;
+            inBox.forEach(element => {
+                element.style.borderRadius = `${15 - Lv_Value * 0.285}px`;
+                element.style.border = `${5.5 - Lv_Value * 0.17}px solid white`;
+            });
+
+
+            hint.addEventListener('click', function () {
+                ans.classList.add('light');
+                setTimeout(function () {
+                    ans.classList.remove('light');
+                }, 1000);
+            });
+
+            ans.addEventListener('click', function () {
+                inBox.forEach(element => {
+                    element.remove();
+                });
+                i++;
+                GameLoop(); // 執行下一個迴圈
+            });
+
+
+        }
+
+        function innerBox(num, color, Lv_Value) {
+            // 清空 gameBox 的內容
+            gameBox.innerHTML = '';
+            // 計算 inner 方塊的大小
+            let innerSize = `calc(100% / ${Lv_Value + 1})`;
+
+            // 產生 inner 方塊
+            for (let index = 0; index < num; index++) {
+                gameBox.innerHTML += `<div class="inner" style="background-color: ${color}; width: ${innerSize}; height: ${innerSize};"></div>`;
+            }
+
+        }
+
+        function stopGame() {
+            clearInterval(stopwatch);
+            timer.innerText = '60';
+            // stop.style.visibility = 'hidden';
+            play.style.visibility = 'visible';
+            let inBox = document.querySelectorAll('.inner');
+            i = 0;
+            Lv.innerText = '';
+            inBox.forEach(element => {
+                element.remove();
+            });
+        }
+
+
+    </script>
+
+</body>
+
+</html>

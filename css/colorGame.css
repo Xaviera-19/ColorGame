@@ -1,0 +1,175 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  background-color: rgb(0, 0, 0);
+  display: flex;
+  flex-direction: column;
+}
+
+nav {
+  margin-top: 10px;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  padding: 0px 5%;
+  justify-content: space-between;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+  color: white;
+}
+nav div > i {
+  display: block;
+  padding: 10px 15px;
+  font-size: 40px;
+  color: white;
+}
+nav #score {
+  width: 150px;
+  height: 100%;
+  background-color: rgba(111, 87, 250, 0.35);
+  border: 1px dashed rgb(255, 196, 88);
+  border-radius: 15px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: flex;
+}
+nav #score .score {
+  height: 100%;
+  line-height: 60px;
+  font-size: 30px;
+  padding-left: 25px;
+}
+nav #time {
+  width: 120px;
+  height: 100%;
+  background-color: rgba(111, 87, 250, 0.35);
+  border: 1px dashed rgb(255, 196, 88);
+  border-radius: 15px;
+  display: flex;
+}
+nav #time span {
+  display: block;
+  font-size: 30px;
+  line-height: 60px;
+}
+nav #play-pause {
+  width: 180px;
+  height: 100%;
+  background-color: rgba(111, 87, 250, 0.35);
+  border: 1px dashed rgb(255, 196, 88);
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+nav #play-pause .pla-pause-box {
+  display: block;
+  width: 33.3333333333%;
+  height: 100%;
+}
+nav #play-pause .pla-pause-box #pause {
+  visibility: hidden;
+}
+nav #play-pause .pla-pause-box #stop {
+  visibility: hidden;
+}
+
+main {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 70px - 60px);
+  display: flex;
+  padding: 0px 25px;
+  justify-content: center;
+  align-items: center;
+}
+main #game-box {
+  position: absolute;
+  z-index: 0;
+  width: 520px;
+  height: 520px;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 12px;
+  padding: 6px;
+}
+main #game-box .inner {
+  width: 50%;
+  height: 50%;
+  background-color: antiquewhite;
+  border-radius: 15px;
+  border: 5px solid white;
+}
+main #game-box .answer {
+  opacity: 0.65;
+}
+main #game-box .light {
+  animation: hint 1s;
+}
+@keyframes hint {
+  0% {
+    box-shadow: 0 0 10px 0 red;
+  }
+  50% {
+    box-shadow: 0 0 30px 10px rgb(136, 17, 247);
+  }
+  100% {
+    box-shadow: 0 0 10px 0 yellow;
+  }
+}
+main #continue-box {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  width: 550px;
+  height: 550px;
+  background-image: url(../img/ico_game_play.svg);
+  background-position: center;
+  background-size: 80%;
+  background-repeat: no-repeat;
+  line-height: 580px;
+  text-align: center;
+  font-size: 50px;
+  color: white;
+  border-radius: 50%;
+  animation: concontinueBoxShadow;
+  box-shadow: 0 0 30px 10px rgb(136, 17, 247);
+  animation-duration: 2.5s;
+  animation-delay: 50ms;
+  animation-iteration-count: infinite;
+}
+@keyframes concontinueBoxShadow {
+  0% {
+    transform: rotate(0deg);
+    box-shadow: 0 0 30px 12px rgb(136, 17, 247);
+  }
+  100% {
+    transform: rotate(360deg);
+    box-shadow: 0 0 10px 0 transparent;
+  }
+}
+
+footer {
+  width: 100%;
+  height: 50px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+footer .main-box {
+  width: 120px;
+  height: 50px;
+}
+footer #hint {
+  line-height: 50px;
+  text-align: center;
+  border-radius: 35%;
+  color: white;
+  border: 1px dashed white;
+}
+footer #hint:hover {
+  box-shadow: 0px 0px 10px 3px rgba(255, 255, 255, 0.5);
+}/*# sourceMappingURL=colorGame.css.map */
